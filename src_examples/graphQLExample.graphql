@@ -1,0 +1,538 @@
+# Types
+type Currency {
+  # currency key
+  key: ID!
+  # currency code
+  code: String
+  # currency label
+  label: String
+}
+type Agency {
+  # agency office key
+  agencyOfficeKey: ID!
+  # agency name
+  agencyName: String
+  # is active
+  isActive: Boolean
+}
+type Amount {
+  value: Float
+  currency: String
+}
+type ExchangeRate {
+  operation: String
+  value: Float
+}
+type RaaSLocation {
+  countryCode: String
+  countryName: String
+  countrySubDivisionCode: String
+  city: String
+  iataCode: String
+  locationCode: String
+  name: String
+  latitude: Float
+  longitude: Float
+}
+type AgencyProposalSegment {
+  proposalSegmentUuid: String
+  pnr: String
+  booked: Boolean
+  confirmationNumber: String
+  endDate: String
+  endTime: String
+  startDate: String
+  startTime: String
+  policyCompliant: Int
+  proposalSegmentType: String
+  segmentTypeCode: String
+  vendorName: String
+  comments: String
+  # Common segments
+  classOfService: String
+  duration: Int
+  startLocation: RaaSLocation
+  endLocation: RaaSLocation
+  mealPreference: String
+  # Air and rail segment
+  seatNumber: String
+  # Air segments
+  flightNumber: String
+  aircraft: String
+  departureTerminal: String
+  arrivalTerminal: String
+  # Rail segments
+  trainNumber: String
+  wagonNumber: String
+  startRailStation: String
+  startRailStationName: String
+  endRailStation: String
+  endRailStationName: String
+  # Car segments
+  airConditioning: Boolean
+  carEquipment: String
+  transmissionPreference: String
+  dropOffCollectionPhoneNumber: String
+  startLocationDetail: String
+  endLocationDetail: String
+  # Hotel segments
+  name: String
+  roomDescription: String
+  providerPhone: String
+  location: RaaSLocation
+  locationDetail: String
+  address: String
+  postalCode: String
+}
+type AgencyProposalEntry {
+  proposalEntryUuid: String
+  exchangeRate: ExchangeRate
+  transactionAmount: Amount
+  transactionDate: String
+  agencyProposalSegments: [AgencyProposalSegment]
+}
+type AgencyProposal {
+  agencyProposalType: String
+  importDate: String
+  proposalId: ID
+  autoSelectProposal: Boolean
+  booked: Boolean
+  comment: String
+  comments: String
+  policyCompliant: Boolean
+  proposal: Boolean
+  proposalOrder: Int
+  providerMessageId: String
+  selected: Boolean
+  totalPostedAmount: Amount
+  approvalLimitDate: String
+  status: String
+  agencyProposalEntries: [AgencyProposalEntry]
+}
+type Policy {
+  # policy id
+  id: ID!
+  # policy id
+  key: ID!
+  # policy label
+  label: String
+  # policy type
+  type: String
+  # whether the policy is active
+  isActive: Boolean
+  # whether the policy is the default one
+  isDefault: Boolean
+  # whether the policy allows Travel Request creation
+  noCreation: Boolean
+  # list of expense types
+  expenseTypeCategories: [ExpenseTypeCategory]
+  # Id of confirmation agreement on submit
+  confirmIdSubmit: ID
+  # Id of confirmation agreement on approve
+  confirmIdApprove: ID
+  # are cash advances managed by the policy
+  manageCashAdvances: Boolean
+  # percentage used to determine the amount of cash advances generated
+  cashAdvancesLimit: Int
+}
+# Employee
+type Employee {
+  # first name
+  firstName: String
+  # last name
+  lastName: String
+  # middle name
+  middleInitial: String
+}
+# Exception level
+enum ExceptionLevel {
+  ERROR
+  WARNING
+  NONE
+}
+# Request summary used to display tiles (active Request)
+type RequestSummary {
+  # id of the Request
+  id: ID!
+  # name of the Request
+  name: String
+  # approval status key
+  apsKey: String
+  # close status
+  isClosed: Boolean
+  # purpose of the Request
+  purpose: String
+  # start date of the Request
+  startDate: String
+  # end date of the Request
+  endDate: String
+  # currency of the amount of the Request
+  currencyCode: String
+  # public key of the Request (unique per customer)
+  shortId: String
+  # Request key (deprecated)
+  key: ID
+  # approver of Request
+  approver: Employee
+  # owner of Request
+  employee: Employee
+  # highest exception level of the Request
+  highestExceptionLevel: ExceptionLevel
+  # creation date of the Request
+  creationDate: String
+  # appoval status of Request
+  approvalStatus: String
+  # amount approved of Request
+  totalApprovedAmount: Float
+  # limit date for Request approval
+  approvalLimitDate: String
+  # number of exceptions of the Request
+  numberOfExceptions: Int
+  # submition date
+  submitDate: String
+  # total posted amount
+  totalPostedAmount: Float
+  # total remaining amount
+  totalRemainingAmount: Float
+  # last comment
+  lastComment: String
+  # main permissions for actions from Request list
+  userPermissions: SummaryUserPermissions
+}
+# Field value
+type FieldValue {
+  # id of the field
+  fieldId: ID!
+  # value of the field
+  value: String
+}
+# Field values for a form
+type FormFieldValues {
+  # id of the Form
+  formId: ID
+  # list of fields of the form
+  fieldValues: [FieldValue]
+}
+# Access
+enum Access {
+  HD
+  RW
+  RO
+}
+# CtrlType
+enum CtrlType {
+  list_edit
+  edit
+  static
+  mpicklist
+  time
+  checkbox
+  textarea
+  picklist
+  date_edit
+}
+# DataType
+enum DataType {
+  LIST
+  BOOLEANCHAR
+  NUMERIC
+  MLIST
+  CHAR
+  MONEY
+  INTEGER
+  TIMESTAMP
+  VARCHAR
+}
+# default values for a location field
+type DefaultValueLocation {
+  # name of the country
+  countryName: String
+  # code of the country
+  ctryCode: String
+  # name to display
+  displayName: String
+  # iata code
+  iataCode: String
+  # is the location iata (whether 'Y' or 'N')
+  isIata: String
+  # location name key
+  lnKey: Int
+  # location key
+  locKey: Int
+  # name
+  name: String
+  # sub-country name
+  subCountryName: String
+}
+# Field Control
+type FieldControl {
+  # id of the control
+  id: ID!
+  # access of the control
+  access: Access!
+  # type of the control
+  ctrlType: CtrlType!
+  # type of data of the control
+  dataType: DataType!
+  # indicate if a value is required
+  required: Boolean!
+  # purpose of the control
+  purpose: String
+  # sequence number of the control
+  sequence: Int
+  # original type of control
+  originalCtrlType: CtrlType
+  # maximum length of the value
+  maxLength: Int
+  # width of the control
+  width: Int
+  # label of the field
+  label: String
+  # number of rows of the control
+  rows: Int
+  # number of columns of the control
+  cols: Int
+  # key of the list TODO: should be listID
+  listKey: Int
+  # hierarchy key for a connected list
+  hierKey: Int
+  # hierarchy level for a connected list
+  hierLevel: Int
+  # define whether the field is custom or not
+  custom: String
+  # default value of the field
+  defaultValue: String
+  # default value code for a list
+  defaultValueLiCode: String
+  # default value name for a list
+  defaultValueLiName: String
+  # original access of the control
+  originalAccess: Access
+  # form field key TODO: must be deleted or rename
+  ffKey: Int
+  #
+  ftCode: String
+  # indicate if the field should be hidden if empty
+  hiddenIfEmpty: String
+  # indicate if the field is dynamic
+  isDynamicField: String
+  # information if the control is a list
+  listInfo: ListInfo
+  # options if the control is a list (see TVR-7109)
+  listOptions: [ListItem]
+  # Indicate if the field is used for copy down
+  isCopyDownSourceForOtherForms: Boolean
+  # Tooltip
+  tooltip: String
+  # regular expression for field validation
+  validationExpression: String
+  # failure message if validation expression failed
+  failureMsg: String
+  # default value for a location field
+  defaultValueLocation: DefaultValueLocation
+}
+# Information about the list
+type ListInfo {
+  # list key
+  listKey: Int
+  # number of item
+  itemCount: Int
+  # default search criteria
+  defaultSearchCriteria: String
+  # display format of each item
+  listItemDisplayFormat: String
+}
+# Field controls for a form
+type FormFieldControls {
+  # id of the Form
+  formId: ID!
+  # list of controls of the form
+  fieldControls: [FieldControl]
+}
+type ExpectedExpenseView {
+  formId: ID!
+  formFieldValues: FormFieldValues
+  formFieldControls(role: String): [FormFieldControls]
+  expenseType: String
+  expenseTypeId: String
+  transactionAmount: Float
+  transactionDate: String
+  currencyId: ID
+  comment: String
+  vendor: String
+  # Indicates if the expense is related to travel allowance
+  isTravelAllowance: Boolean
+  comments: [Comment]
+  mileageJourneyLog: MileageJourneyLog
+}
+type SegmentView {
+  segmentId: ID
+  formFieldValues: FormFieldValues
+  customFormFieldValues: FormFieldValues
+  comments: [Comment]
+}
+type SegmentsView {
+  entryId: ID
+  tripType: String
+  startDate: String
+  endDate: String
+  locTypeCode: String
+  estimateAvailable(
+    entityID: ID!
+    policyID: ID!
+    segmentTypeId: String!
+  ): Boolean
+  isSelfBooked: Boolean
+  formFieldControls(formId: ID, role: String): [FormFieldControls]
+  customFormFieldControls(formId: ID, role: String): [FormFieldControls]
+  segments: [SegmentView]
+  segmentTypeId: String
+}
+type HeaderForm {
+  # currency key used at the location
+  crnKey: String
+  # header form field values
+  formFieldValues: FormFieldValues
+  # form controls list (header, cash advance, allocation, ...)
+  formFieldControls: [FormFieldControls]
+  # list of comments
+  comments: [Comment]
+}
+# Exception of a Request
+type RequestException {
+  # code of the exception
+  code: String
+  # level of the exception
+  level: ExceptionLevel
+  # parameters for the messages of the exception TODO: message should already formatted with thoses parameters
+  parameters: [String]
+  # message of the exception
+  message: String
+  # cash advance id
+  cashAdvanceId: String
+}
+# Location detail for segments
+type ExpectedExpenseLocation {
+  # location name (i.e. 'Sydney')
+  locationName: String
+  # locName (i.e. ', New South Wales')
+  locName: String
+  # iata code for air segment (i.e. 'CBR')
+  iataCode: String
+  # airport name for air segment (i.e. 'Canberra')
+  airportName: String
+}
+# Expected Expense
+type ExpectedExpense {
+  # id of the Expected Expense
+  id: ID!
+  # key of the Expected Expense
+  key: ID!
+  # id of related segments
+  segmentIds: [ID]
+  # type of the Expected Expense
+  type: String
+  # transaction date of the Expected Expense
+  transactionDate: String
+  # description of the Expected Expense
+  description: String
+  # comments of the Expected Expense
+  areComments: String
+  # transaction amount of the Expected Expense
+  transactionAmount: Float
+  # posted amount of the Expected Expense
+  postedAmount: Float
+  # currency of the transaction
+  currencyCode: String
+  # key of the currency TODO: we should use the code
+  crnKey: Int
+  # whether the amount is allocated is allocated or not
+  allocationState: Boolean
+  # whether the amount is allocated or not
+  fromSegment: Boolean
+  # id of the form
+  formId: ID
+  # id of the custom form (only for segments)
+  customFormId: ID
+  # id of the expense
+  expId: ID
+  # type of the appropriate form
+  formType: String
+  # allocation version
+  allocationVersion: String
+  # expense type name
+  expName: String
+  # approved amount
+  approvedAmount: Float
+  # segment start's date
+  segmentStartDate: String
+  # Id of the expense type related to the segment
+  segmentTypeId: String
+  # id of the daily allowance
+  dailyAllowanceId: String
+  # True if the segment was created by Travel
+  isSelfBooked: Boolean
+  # True if the segment was auto generated for agency fees
+  isAutoEstimatedAgencyFees: Boolean
+  # From location information
+  fromLocation: ExpectedExpenseLocation
+  # To location information
+  toLocation: ExpectedExpenseLocation
+  # Trip type for segment (OW/RT/MS)
+  tripType: String
+}
+# Expected Expense exception
+type ExpenseException {
+  # Expected Expense
+  expectedExpense: ExpectedExpense
+  # exceptions related to the Expected Expense
+  exceptions: [RequestException]
+  # highest level of expense exceptions
+  maxLevel: ExceptionLevel
+}
+# Exceptions of a Request
+type RequestExceptions {
+  # exceptions of the header
+  header: [RequestException]
+  # exceptions of request expenses
+  expense: [ExpenseException]
+  # exceptions of request cash advances
+  cashAdvance: [RequestException]
+  # indicate if some exceptions are present
+  hasExceptions: Boolean
+  # number of exceptions
+  exceptionCount: Int
+  # highest level of all exceptions
+  maxLevel: ExceptionLevel
+}
+# List Item
+type ListItem {
+  # code of the item
+  code: String
+  # key of the item
+  key: String
+  # matching value
+  matchValue: String
+  # short code of the item
+  shortCode: String
+  # text of the item
+  txt: String
+}
+type ConnectedListItem {
+  # code of the item
+  code: String
+  # code or text
+  codeortext: String
+  # whether the item is a mru
+  isMru: String
+  # key of the item
+  key: String
+  # matching value
+  matchValue: String
+  # item order
+  order: Int
+  # short code
+  shortCode: String
+  # text of the item
+  txt: String
+}
